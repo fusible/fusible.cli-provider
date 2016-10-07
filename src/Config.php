@@ -39,6 +39,12 @@ use Aura\Cli\Help;
  */
 class Config extends ContainerConfig
 {
+    const GLOBALS = 'GLOBALS';
+
+    const FACTORY = 'aura/cli:factory';
+    const CONTEXT = 'aura/cli:context';
+    const STDIO   = 'aura/cli:stdio';
+
     /**
      * Globals
      *
@@ -73,30 +79,24 @@ class Config extends ContainerConfig
      */
     public function define(Container $di)
     {
-        if (! isset($di->values['GLOBALS'])) {
-            $di->values['GLOBALS'] = $this->globals;
+        if (! isset($di->values[self::GLOBALS])) {
+            $di->values[self::GLOBALS] = $this->globals;
         }
 
-        $di->set(
-            'aura/cli:factory',
-            $di->lazyNew(Factory::class)
-        );
+        $di->set(self::FACTORY, $di->lazyNew(Factory::class));
 
         $di->set(
-            'aura/cli:context',
+            self::CONTEXT,
             $di->lazyGetCall(
-                'aura/cli:factory',
+                self::FACTORY,
                 'newContext',
-                $di->lazyValue('GLOBALS')
+                $di->lazyValue(self::GLOBALS)
             )
         );
 
         $di->set(
-            'aura/cli:stdio',
-            $di->lazyGetCall(
-                'aura/cli:factory',
-                'newStdio'
-            )
+            self::STDIO,
+            $di->lazyGetCall(self::FACTORY, 'newStdio')
         );
 
         $di->params[Help::class]
