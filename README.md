@@ -17,9 +17,13 @@ composer require fusible/cli-provider
 See: [ Aura\Di > *Container Builder and Config Classes* ][Aura\Di docs].
 ```php
 use Aura\Di\ContainerBuilder;
+use Fusible\CliProvider\Config as CliConfig;
 
 $builder = new ContainerBuilder();
-$di = $builder->newConfiguredInstance(['Fusible\CliProvider\Config']);
+$di = $builder->newConfiguredInstance([CliConfig::class]);
+
+$context = $di->get(CliConfig::CONTEXT);
+$stdio   = $di->get(CliConfig::STDIO);
 ```
 
 
