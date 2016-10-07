@@ -79,24 +79,24 @@ class Config extends ContainerConfig
      */
     public function define(Container $di)
     {
-        if (! isset($di->values[self::GLOBALS])) {
-            $di->values[self::GLOBALS] = $this->globals;
+        if (! isset($di->values[static::GLOBALS])) {
+            $di->values[static::GLOBALS] = $this->globals;
         }
 
-        $di->set(self::FACTORY, $di->lazyNew(Factory::class));
+        $di->set(static::FACTORY, $di->lazyNew(Factory::class));
 
         $di->set(
-            self::CONTEXT,
+            static::CONTEXT,
             $di->lazyGetCall(
-                self::FACTORY,
+                static::FACTORY,
                 'newContext',
-                $di->lazyValue(self::GLOBALS)
+                $di->lazyValue(static::GLOBALS)
             )
         );
 
         $di->set(
-            self::STDIO,
-            $di->lazyGetCall(self::FACTORY, 'newStdio')
+            static::STDIO,
+            $di->lazyGetCall(static::FACTORY, 'newStdio')
         );
 
         $di->params[Help::class]
